@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 interface Props {
@@ -5,6 +7,11 @@ interface Props {
 }
 
 const MealInput: React.FC<Props> = ({ day }) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.currentTarget.blur()
+    }
+  }
   return (
     <div>
       <input
@@ -13,6 +20,7 @@ const MealInput: React.FC<Props> = ({ day }) => {
         name={`${day}DinnerInput`}
         placeholder={`Enter ${day}'s Dinner Idea`}
         className=" input-accent w-full max-w-xs h-8"
+        onKeyDown={handleKeyDown}
       />
     </div>
   )
