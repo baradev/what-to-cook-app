@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { HeartButton } from './HeartButton'
+import MealInput from './MealInput'
 
 const DayLine = () => {
   const daysOfWeek = [
@@ -21,13 +22,7 @@ const DayLine = () => {
           <label className="mb-4" htmlFor={`${day}DinnerInput`}>
             {day}:
           </label>
-          <input
-            type="text"
-            id={`${day}DinnerInput`}
-            name={`${day}DinnerInput`}
-            placeholder={`Enter ${day}'s Dinner Idea`}
-            className="w-full"
-          />
+          <MealInput day={day} />
         </div>
         <div className="p-2 border-b flex align-middle">
           <HeartButton />
