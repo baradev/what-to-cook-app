@@ -1,6 +1,6 @@
 // DayLine.tsx
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { HeartButton } from './HeartButton'
 import MealInput from './MealInput'
 import WeekPicker from './WeekPicker'
@@ -19,14 +19,8 @@ const DayLine = () => {
   const [focusedIndex, setFocusedIndex] = useState<number>(0)
   const [weekStartDate, setWeekStartDate] = useState<Date>(new Date())
 
-  useEffect(() => {
-    // Update the week start date when the component mounts
-    handleWeekChange(weekStartDate)
-  }, [])
-
-  const handleWeekChange = (weekStartDate: Date) => {
-    // Set the week start date and calculate dates for each day of the week
-    setWeekStartDate(weekStartDate)
+  const handleWeekChange = (newWeekStartDate: Date) => {
+    setWeekStartDate(newWeekStartDate)
   }
 
   const handleFocusNext = () => {
@@ -41,8 +35,11 @@ const DayLine = () => {
 
   return (
     <div>
-      {/* Pass onChangeWeek function as a prop to WeekPicker */}
-      <WeekPicker onChangeWeek={handleWeekChange} />
+      {/* Pass weekStartDate and handleWeekChange as props to WeekPicker */}
+      <WeekPicker
+        weekStartDate={weekStartDate}
+        onChangeWeek={handleWeekChange}
+      />
       {daysOfWeek.map((day, index) => {
         // Calculate the date for the current day
         const currentDate = new Date(weekStartDate)

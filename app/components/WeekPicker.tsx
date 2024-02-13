@@ -1,28 +1,13 @@
 // WeekPicker.tsx
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 
 interface Props {
+  weekStartDate: Date
   onChangeWeek: (weekStartDate: Date) => void
 }
 
-const WeekPicker: React.FC<Props> = ({ onChangeWeek }) => {
-  const [selectedWeekStartDate, setSelectedWeekStartDate] = useState<Date>(
-    getStartOfWeek(new Date())
-  )
-
-  const handleWeekChange = () => {
-    // Call onChangeWeek with the selected week's start date
-    onChangeWeek(selectedWeekStartDate)
-  }
-
-  // Get the start date of the ISO week containing the given date
-  function getStartOfWeek(date: Date): Date {
-    const dayOfWeek = date.getDay() // 0 (Sunday) to 6 (Saturday)
-    const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Adjust when Sunday is the first day of the week
-    return new Date(date.setDate(diff))
-  }
-
+const WeekPicker: React.FC<Props> = ({ weekStartDate, onChangeWeek }) => {
   // Format date to YYYY-Www (ISO week date format)
   const formatDateToWeekInput = (date: Date): string => {
     const year = date.getFullYear()
@@ -46,17 +31,15 @@ const WeekPicker: React.FC<Props> = ({ onChangeWeek }) => {
       <input
         type="week"
         id="week"
-        value={formatDateToWeekInput(selectedWeekStartDate)}
+        value={formatDateToWeekInput(weekStartDate)}
         onChange={(e) => {
           // Extract the year and week number from the input value and set the new date
           const [year, week] = e.target.value.split('-W')
           const newDate = new Date(parseInt(year), 0, 1) // January 1st of the year
           const weekOffset = (parseInt(week, 10) - 1) * 7 // Number of days to add to reach the first day of the week
           newDate.setDate(newDate.getDate() + weekOffset + 1) // Adjust to start from Monday
-          setSelectedWeekStartDate(newDate)
+          onChangeWeek(newDate) // Call onChangeWeek with the selected week's start date
         }}
-        // Update the week start date when the input loses focus
-        onBlur={handleWeekChange}
       />
     </div>
   )
