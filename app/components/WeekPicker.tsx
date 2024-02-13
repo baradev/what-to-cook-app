@@ -1,4 +1,4 @@
-// WeekSelector.tsx
+// WeekPicker.tsx
 import React, { useState } from 'react'
 
 interface Props {
@@ -6,17 +6,19 @@ interface Props {
 }
 
 const WeekPicker: React.FC<Props> = ({ onChangeWeek }) => {
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().substring(0, 10)
+  const getStartOfWeek = (date: Date): Date => {
+    const currentDate = new Date(date)
+    const dayOfWeek = currentDate.getDay()
+    const diff = currentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Adjust when Sunday is the first day of the week
+    return new Date(currentDate.setDate(diff))
+  }
+
+  const [selectedWeekStartDate, setSelectedWeekStartDate] = useState<string>(
+    getStartOfWeek(new Date()).toISOString().substring(0, 10)
   )
 
   const handleWeekChange = () => {
-    const selectedWeekStartDate = new Date(selectedDate)
-    selectedWeekStartDate.setDate(
-      selectedWeekStartDate.getDate() - selectedWeekStartDate.getDay()
-    )
-
-    onChangeWeek(selectedWeekStartDate)
+    onChangeWeek(new Date(selectedWeekStartDate))
   }
 
   return (
@@ -25,8 +27,8 @@ const WeekPicker: React.FC<Props> = ({ onChangeWeek }) => {
       <input
         type="week"
         id="week"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
+        value={selectedWeekStartDate}
+        onChange={(e) => setSelectedWeekStartDate(e.target.value)}
         onBlur={handleWeekChange}
       />
     </div>
