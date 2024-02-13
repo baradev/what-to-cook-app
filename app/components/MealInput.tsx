@@ -1,32 +1,31 @@
 'use client'
-
+// MealInput.tsx
 import React from 'react'
 
 interface Props {
   day: string
-  index: number
-  totalInputs: number
+  isFocused: boolean
   onFocusNext: () => void
   onFocusPrevious: () => void
-  isFocused: boolean // Add isFocused prop to Props interface
 }
 
 const MealInput: React.FC<Props> = ({
   day,
-  index,
-  totalInputs,
+  isFocused,
   onFocusNext,
   onFocusPrevious,
-  isFocused,
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      event.preventDefault()
       event.currentTarget.blur()
     } else if (event.key === 'ArrowDown') {
+      event.preventDefault()
       onFocusNext()
     } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
       onFocusPrevious()
     }
   }
@@ -45,7 +44,7 @@ const MealInput: React.FC<Props> = ({
         id={`${day}DinnerInput`}
         name={`${day}DinnerInput`}
         placeholder={`Enter ${day}'s Dinner Idea`}
-        className="w-full max-w-xs h-8 input-success "
+        className="w-full max-w-xs h-8 input-success"
         onKeyDown={handleKeyDown}
         onFocus={() => inputRef.current?.select()}
       />

@@ -1,3 +1,4 @@
+// DayLine.tsx
 'use client'
 import React, { useState } from 'react'
 import { HeartButton } from './HeartButton'
@@ -15,39 +16,30 @@ const DayLine = () => {
   ]
   const [focusedIndex, setFocusedIndex] = useState<number>(0)
 
-  const totalInputs = daysOfWeek.length
-
   const handleFocusNext = () => {
-    setFocusedIndex((prevIndex) => (prevIndex + 1) % totalInputs)
+    setFocusedIndex((prevIndex) => (prevIndex + 1) % daysOfWeek.length)
   }
 
   const handleFocusPrevious = () => {
-    setFocusedIndex((prevIndex) => (prevIndex - 1 + totalInputs) % totalInputs)
-  }
-
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'ArrowDown') {
-      handleFocusNext()
-    } else if (event.key === 'ArrowUp') {
-      handleFocusPrevious()
-    }
+    setFocusedIndex(
+      (prevIndex) => (prevIndex - 1 + daysOfWeek.length) % daysOfWeek.length
+    )
   }
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={-1}>
+    <div>
       {daysOfWeek.map((day, index) => (
         <div key={day} className="flex flex-row ml-10">
-          <div key={day} className="flex flex-col p-2 border-b w-96">
+          <div className="flex flex-col p-2 border-b w-96">
             <label className="mb-4" htmlFor={`${day}DinnerInput`}>
               {day}:
             </label>
             <MealInput
+              key={day}
               day={day}
-              index={index}
-              totalInputs={totalInputs}
+              isFocused={focusedIndex === index}
               onFocusNext={handleFocusNext}
               onFocusPrevious={handleFocusPrevious}
-              isFocused={focusedIndex === index}
             />
           </div>
           <div className="p-2 border-b flex align-middle">
