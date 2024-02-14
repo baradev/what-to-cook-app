@@ -8,6 +8,7 @@ export default async function Home() {
   console.log(data)
 
   const addMealToDatabase = async (mealData: any) => {
+    'use server'
     await db.insert(meal).values(mealData)
     console.log('Meal added to database:', mealData)
   }
