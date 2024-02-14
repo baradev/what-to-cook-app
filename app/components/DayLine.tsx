@@ -76,6 +76,7 @@ const DayLine: React.FC<DayLineProps> = ({ addMealToDatabase }) => {
                 onFocusNext={handleFocusNext}
                 onFocusPrevious={handleFocusPrevious}
                 addMeal={addMeal} // Ensure this prop is passed correctly
+                initialMeal=""
               />
             </div>
             <div className="p-2 border-b flex align-middle">
