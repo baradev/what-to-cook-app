@@ -1,11 +1,15 @@
-// DayLine.tsx
 'use client'
+
 import React, { useState } from 'react'
 import { HeartButton } from './HeartButton'
 import MealInput from './MealInput'
 import WeekPicker from './WeekPicker'
 
-const DayLine = () => {
+interface DayLineProps {
+  addMealToDatabase: Function
+}
+
+const DayLine: React.FC<DayLineProps> = ({ addMealToDatabase }) => {
   const daysOfWeek = [
     'Monday',
     'Tuesday',
@@ -33,6 +37,20 @@ const DayLine = () => {
     )
   }
 
+  const addMeal = (day: string, mealName: string) => {
+    const currentDate = new Date(weekStartDate)
+    currentDate.setDate(currentDate.getDate() + daysOfWeek.indexOf(day))
+
+    // Create mealData object with id, date, and mealName
+    const mealData = {
+      id: null, // Let the database assign an id
+      date: currentDate.toISOString().substring(0, 10), // Format date as "YYYY-MM-DD"
+      mealName: mealName,
+    }
+
+    addMealToDatabase(mealData)
+  }
+
   return (
     <div>
       {/* Pass weekStartDate and handleWeekChange as props to WeekPicker */}
@@ -57,6 +75,7 @@ const DayLine = () => {
                 isFocused={focusedIndex === index}
                 onFocusNext={handleFocusNext}
                 onFocusPrevious={handleFocusPrevious}
+                addMeal={addMeal} // Ensure this prop is passed correctly
               />
             </div>
             <div className="p-2 border-b flex align-middle">

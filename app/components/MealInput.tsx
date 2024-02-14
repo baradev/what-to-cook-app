@@ -7,6 +7,7 @@ interface Props {
   isFocused: boolean
   onFocusNext: () => void
   onFocusPrevious: () => void
+  addMeal: (day: string, mealName: string) => void
 }
 
 const MealInput: React.FC<Props> = ({
