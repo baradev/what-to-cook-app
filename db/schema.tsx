@@ -1,4 +1,4 @@
-import { integer, text, sqliteTable } from 'drizzle-orm/sqlite-core'
+import { text, sqliteTable } from 'drizzle-orm/sqlite-core'
 
 export const meal = sqliteTable('Meal', {
   date: text('date'), // Add a text field to store the date
