@@ -1,10 +1,7 @@
 // Home.tsx
 'use client'
 import React, { useState, useEffect } from 'react'
-import sqlite3 from 'sqlite3'
-import { open, Database } from 'sqlite'
-import Week from './components/Week'
-import { Meal } from '../db/schema'
+import Week from './ui/components/Week'
 
 async function getMeals(): Promise<Meal[]> {
   'use server'

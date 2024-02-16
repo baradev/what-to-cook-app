@@ -5,7 +5,6 @@
 import React, { useState } from 'react'
 import WeekPicker from './WeekPicker'
 import DayLine from './DayLine'
-import { Meal } from '../../db/schema'
 
 interface WeekProps {
   meals: Meal[]
