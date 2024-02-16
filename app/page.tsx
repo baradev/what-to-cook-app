@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
-import DayLine from './components/DayLine'
+import Week from './components/Week'
 
 interface Meal {
   id: string
@@ -26,17 +26,8 @@ export default async function Home() {
 
   return (
     <div className="flex">
-      <h1>Dynamic Meals</h1>
-      <hr></hr>
-      <ul>
-        {meals &&
-          meals.map((meal: Meal, index: number) => (
-            <li key={index}>{meal.name}</li>
-          ))}
-      </ul>
-
       <div className="flex flex-col border-r p-4">
-        <DayLine />
+        <Week />
       </div>
     </div>
   )
