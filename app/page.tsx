@@ -1,7 +1,7 @@
 // Home.tsx
 'use client'
 import React, { useState, useEffect } from 'react'
-import Week from './ui/components/Week'
+import Week from './ui/Week'
 
 async function getMeals(): Promise<Meal[]> {
   'use server'
