@@ -1,6 +1,7 @@
 // Week.tsx
-
 'use client'
+
+// Week.tsx
 import React, { useState } from 'react'
 import WeekPicker from './WeekPicker'
 import DayLine from './DayLine'
@@ -8,9 +9,10 @@ import { Meal } from '../../db/schema'
 
 interface WeekProps {
   meals: Meal[]
+  addNewMeal: (newMeal: Meal) => void // Ensure addNewMeal is included
 }
 
-const Week: React.FC<WeekProps> = ({ meals }) => {
+const Week: React.FC<WeekProps> = ({ meals, addNewMeal }) => {
   const daysOfWeek = [
     'Monday',
     'Tuesday',
@@ -25,7 +27,7 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
   const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
     const currentDate = new Date()
     const dayOfWeek = currentDate.getDay()
-    const diff = currentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Adjust when day is Sunday
+    const diff = currentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1)
     return new Date(currentDate.setDate(diff))
   })
 
@@ -44,18 +46,16 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
   }
 
   const updateMeal = (updatedMeal: Meal) => {
-    // Implement logic to update the meal in the state or send it to the server
     console.log('Updated meal:', updatedMeal)
+    // Implement logic to update the meal in the state or send it to the server
   }
 
   return (
     <div>
-      {/* Pass weekStartDate and handleWeekChange as props to WeekPicker */}
       <WeekPicker
         weekStartDate={weekStartDate}
         onChangeWeek={handleWeekChange}
       />
-      {/* meals */}
       {meals.map((meal) => {
         return (
           <div key={meal.id}>
@@ -64,11 +64,9 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
         )
       })}
       {daysOfWeek.map((day, index) => {
-        // Calculate the date for the current day
         const currentDate = new Date(weekStartDate)
         currentDate.setDate(currentDate.getDate() + index)
 
-        // get meal based on the current date
         const meal = meals.find(
           (meal: Meal) =>
             meal.day === currentDate.toISOString().substring(0, 10)
@@ -84,7 +82,8 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
             handleFocusNext={handleFocusNext}
             handleFocusPrevious={handleFocusPrevious}
             index={index}
-            updateMeal={updateMeal} // Pass the updateMeal function
+            updateMeal={updateMeal}
+            addNewMeal={addNewMeal} // Pass the addNewMeal function
           />
         )
       })}

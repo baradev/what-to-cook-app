@@ -1,7 +1,7 @@
 // DayLine.tsx
 import React, { useState } from 'react'
 import MealInput from './MealInput'
-import { HeartButton } from './HeartButton' // Import the HeartButton component
+import { HeartButton } from './HeartButton'
 import { Meal } from '@/db/schema'
 
 interface DayLineProps {
@@ -13,6 +13,7 @@ interface DayLineProps {
   handleFocusNext: () => void
   handleFocusPrevious: () => void
   updateMeal: (meal: Meal) => void
+  addNewMeal: (newMeal: Meal) => void // Add this prop for adding new meals
 }
 
 const DayLine: React.FC<DayLineProps> = ({
@@ -24,6 +25,7 @@ const DayLine: React.FC<DayLineProps> = ({
   index,
   meal,
   updateMeal,
+  addNewMeal, // Receive the addNewMeal prop
 }) => {
   const [mealName, setMealName] = useState(meal?.name || '')
 
@@ -32,6 +34,19 @@ const DayLine: React.FC<DayLineProps> = ({
     setMealName(newName)
     if (meal) {
       updateMeal({ ...meal, name: newName })
+    }
+  }
+
+  const handleAddNewMeal = () => {
+    if (mealName.trim() !== '') {
+      const newMeal: Meal = {
+        id: '', // You may need to generate a unique id here
+        day: day,
+        name: mealName,
+        isFavourite: false,
+      }
+      addNewMeal(newMeal)
+      setMealName('')
     }
   }
 
@@ -51,7 +66,9 @@ const DayLine: React.FC<DayLineProps> = ({
         />
       </div>
       <div className="p-2 border-b flex align-middle">
-        <HeartButton /> {/* Reintroduce the HeartButton component */}
+        <HeartButton />
+        <button onClick={handleAddNewMeal}>Add Meal</button>{' '}
+        {/* Button to add new meal */}
       </div>
     </div>
   )

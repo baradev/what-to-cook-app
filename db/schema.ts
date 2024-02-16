@@ -1,6 +1,7 @@
+// schema.ts
 export interface Meal {
-  id: string
-  day: string
+  id?: string // Make id optional
   name: string
+  day: string
   isFavourite: boolean
 }
