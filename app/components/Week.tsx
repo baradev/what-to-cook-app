@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState } from 'react'
 import WeekPicker from './WeekPicker'
 import DayLine from './DayLine'
@@ -20,7 +21,12 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
   ]
 
   const [focusedIndex, setFocusedIndex] = useState<number>(0)
-  const [weekStartDate, setWeekStartDate] = useState<Date>(new Date())
+  const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
+    const currentDate = new Date()
+    const dayOfWeek = currentDate.getDay()
+    const diff = currentDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Adjust when day is Sunday
+    return new Date(currentDate.setDate(diff))
+  })
 
   const handleWeekChange = (newWeekStartDate: Date) => {
     setWeekStartDate(newWeekStartDate)
@@ -63,19 +69,16 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
         )
 
         return (
-          <>
-            <div>{meal?.name}</div>
-            <DayLine
-              meal={meal}
-              key={day}
-              day={day}
-              currentDate={currentDate}
-              focusedIndex={focusedIndex}
-              handleFocusNext={handleFocusNext}
-              handleFocusPrevious={handleFocusPrevious}
-              index={index}
-            />
-          </>
+          <DayLine
+            meal={meal}
+            key={day}
+            day={day}
+            currentDate={currentDate}
+            focusedIndex={focusedIndex}
+            handleFocusNext={handleFocusNext}
+            handleFocusPrevious={handleFocusPrevious}
+            index={index}
+          />
         )
       })}
     </div>
