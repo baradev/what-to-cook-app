@@ -2,12 +2,14 @@
 import React from 'react'
 import { HeartButton } from './HeartButton'
 import MealInput from './MealInput'
+import { Meal } from '@/db/schema'
 
 interface DayLineProps {
   day: string
   currentDate: Date
   focusedIndex: number
   index: number
+  meal?: Meal
   handleFocusNext: () => void
   handleFocusPrevious: () => void
 }
@@ -19,6 +21,7 @@ const DayLine: React.FC<DayLineProps> = ({
   handleFocusNext,
   handleFocusPrevious,
   index,
+  meal,
 }) => {
   return (
     <div className="flex flex-row ml-10">
@@ -27,6 +30,7 @@ const DayLine: React.FC<DayLineProps> = ({
           {day}: {currentDate.toISOString().substring(0, 10)}
         </label>
         <MealInput
+          value={meal?.name || ''}
           day={day}
           isFocused={focusedIndex === index}
           onFocusNext={handleFocusNext}

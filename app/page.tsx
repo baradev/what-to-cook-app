@@ -1,13 +1,7 @@
 import sqlite3 from 'sqlite3'
 import { open, Database } from 'sqlite'
 import Week from './components/Week'
-
-interface Meal {
-  id: string
-  date: string
-  name: string
-  isFavourite: boolean
-}
+import { Meal } from '../db/schema'
 
 async function getMeals(): Promise<Meal[]> {
   const db: Database = await open({
@@ -27,7 +21,7 @@ export default async function Home() {
   return (
     <div className="flex">
       <div className="flex flex-col border-r p-4">
-        <Week />
+        <Week meals={meals} />
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ interface Props {
   isFocused: boolean
   onFocusNext: () => void
   onFocusPrevious: () => void
+  value: string
 }
 
 const MealInput: React.FC<Props> = ({
@@ -14,6 +15,7 @@ const MealInput: React.FC<Props> = ({
   isFocused,
   onFocusNext,
   onFocusPrevious,
+  value,
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -41,6 +43,7 @@ const MealInput: React.FC<Props> = ({
       <input
         ref={inputRef}
         type="text"
+        value={value}
         id={`${day}DinnerInput`}
         name={`${day}DinnerInput`}
         placeholder={`Enter ${day}'s Dinner Idea`}

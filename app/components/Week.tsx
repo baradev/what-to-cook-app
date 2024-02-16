@@ -2,8 +2,13 @@
 import React, { useState } from 'react'
 import WeekPicker from './WeekPicker'
 import DayLine from './DayLine'
+import { Meal } from '../../db/schema'
 
-const Week = () => {
+interface WeekProps {
+  meals: Meal[]
+}
+
+const Week: React.FC<WeekProps> = ({ meals }) => {
   const daysOfWeek = [
     'Monday',
     'Tuesday',
@@ -38,21 +43,39 @@ const Week = () => {
         weekStartDate={weekStartDate}
         onChangeWeek={handleWeekChange}
       />
+      {/* meals */}
+      {meals.map((meal) => {
+        return (
+          <div key={meal.id}>
+            {meal.day} {meal.name}
+          </div>
+        )
+      })}
       {daysOfWeek.map((day, index) => {
         // Calculate the date for the current day
         const currentDate = new Date(weekStartDate)
         currentDate.setDate(currentDate.getDate() + index)
 
+        // get meal based on the current date
+        const meal = meals.find(
+          (meal: Meal) =>
+            meal.day === currentDate.toISOString().substring(0, 10)
+        )
+
         return (
-          <DayLine
-            key={day}
-            day={day}
-            currentDate={currentDate}
-            focusedIndex={focusedIndex}
-            handleFocusNext={handleFocusNext}
-            handleFocusPrevious={handleFocusPrevious}
-            index={index}
-          />
+          <>
+            <div>{meal?.name}</div>
+            <DayLine
+              meal={meal}
+              key={day}
+              day={day}
+              currentDate={currentDate}
+              focusedIndex={focusedIndex}
+              handleFocusNext={handleFocusNext}
+              handleFocusPrevious={handleFocusPrevious}
+              index={index}
+            />
+          </>
         )
       })}
     </div>
