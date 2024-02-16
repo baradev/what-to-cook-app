@@ -1,4 +1,3 @@
-'use client'
 // MealInput.tsx
 import React from 'react'
 
@@ -8,6 +7,7 @@ interface Props {
   onFocusNext: () => void
   onFocusPrevious: () => void
   value: string
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void // New prop
 }
 
 const MealInput: React.FC<Props> = ({
@@ -16,6 +16,7 @@ const MealInput: React.FC<Props> = ({
   onFocusNext,
   onFocusPrevious,
   value,
+  onChange, // New prop
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -50,6 +51,7 @@ const MealInput: React.FC<Props> = ({
         className="w-full max-w-xs h-8 input-success"
         onKeyDown={handleKeyDown}
         onFocus={() => inputRef.current?.select()}
+        onChange={onChange} // Pass the change handler
       />
     </div>
   )

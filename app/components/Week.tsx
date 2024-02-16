@@ -1,5 +1,6 @@
-'use client'
+// Week.tsx
 
+'use client'
 import React, { useState } from 'react'
 import WeekPicker from './WeekPicker'
 import DayLine from './DayLine'
@@ -42,6 +43,11 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
     )
   }
 
+  const updateMeal = (updatedMeal: Meal) => {
+    // Implement logic to update the meal in the state or send it to the server
+    console.log('Updated meal:', updatedMeal)
+  }
+
   return (
     <div>
       {/* Pass weekStartDate and handleWeekChange as props to WeekPicker */}
@@ -78,6 +84,7 @@ const Week: React.FC<WeekProps> = ({ meals }) => {
             handleFocusNext={handleFocusNext}
             handleFocusPrevious={handleFocusPrevious}
             index={index}
+            updateMeal={updateMeal} // Pass the updateMeal function
           />
         )
       })}
