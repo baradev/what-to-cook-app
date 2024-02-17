@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import MealInput from './MealInput'
 import { HeartButton } from './HeartButton'
-import { Meal } from '@/db/schema'
+import { Meal } from '@/app/lib/definitions'
 
 interface DayLineProps {
   day: string
