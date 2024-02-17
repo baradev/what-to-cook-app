@@ -6,6 +6,31 @@ const meals = [
     day: '2024-02-17',
     isFavourite: true,
   },
+  {
+    name: 'Ragu',
+    day: '2024-02-18',
+    isFavourite: true,
+  },
+  {
+    name: 'Dumplings',
+    day: '2024-02-19',
+    isFavourite: true,
+  },
+  {
+    name: 'Burrito',
+    day: '2024-02-20',
+    isFavourite: true,
+  },
+  {
+    name: 'Butter Chicken',
+    day: '2024-02-21',
+    isFavourite: true,
+  },
+  {
+    name: 'Pasta Salad',
+    day: '2024-02-22',
+    isFavourite: true,
+  },
 ]
 
 module.exports = {
