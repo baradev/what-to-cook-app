@@ -3,11 +3,12 @@ import { Meal } from './definitions'
 
 export async function fetchMeals() {
   try {
+    // TODO: add filter
     const data = await sql<Meal>`
       SELECT
         id,
         name,
-        date,
+        day,
         isFavourite
       FROM meals
   

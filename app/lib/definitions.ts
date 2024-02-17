@@ -3,5 +3,4 @@ export type Meal = {
   name: string
   day: string
   isFavourite: boolean
-
 }
