@@ -1,42 +1,7 @@
-// Home.tsx
-'use client'
 import React, { useState, useEffect } from 'react'
 import Week from './ui/Week'
 
-async function getMeals(): Promise<Meal[]> {
-  'use server'
-  const db: Database = await open({
-    filename: 'db/database.sqlite',
-    driver: sqlite3.Database,
-  })
-
-  try {
-    const meals: Meal[] = await db.all('SELECT * FROM meals')
-    return meals
-  } catch (error) {
-    console.error('Error fetching meals:', error)
-    return []
-  }
-}
-
-async function addMealToDB(meal: Meal): Promise<void> {
-  const db: Database = await open({
-    filename: 'db/database.sqlite',
-    driver: sqlite3.Database,
-  })
-
-  try {
-    await db.run(
-      'INSERT INTO meals (name, day, isFavourite) VALUES (?, ?, ?)',
-      [meal.name, meal.day, meal.isFavourite ? 1 : 0]
-    )
-    console.log('Meal added successfully')
-  } catch (error) {
-    console.error('Error adding meal:', error)
-  }
-}
-
-export default function Home() {
+export default async function Page() {
   const [meals, setMeals] = useState<Meal[]>([])
 
   const handleAddMeal = async (newMeal: Meal) => {
