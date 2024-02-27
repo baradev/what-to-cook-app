@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from 'react'
 
 export const HeartButton = () => {
@@ -11,7 +10,7 @@ export const HeartButton = () => {
   return (
     <div>
       <button
-        className={`btn ${!clicked ? 'shadow' : ''}`}
+        className={`btn ${clicked ? 'shadow' : ''}`} // Add the shadow class when clicked
         onClick={handleClick}
       >
         <svg

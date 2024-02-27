@@ -31,6 +31,11 @@ const meals = [
     day: '2024-02-22',
     isFavourite: true,
   },
+  {
+    name: 'Sushi',
+    day: '2024-02-23',
+    isFavourite: true,
+  },
 ]
 
 module.exports = {
