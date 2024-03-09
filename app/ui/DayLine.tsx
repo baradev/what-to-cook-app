@@ -9,11 +9,8 @@ interface DayLineProps {
   currentDate: Date
   focusedIndex: number
   index: number
-  meal?: Meal
   handleFocusNext: () => void
   handleFocusPrevious: () => void
-  updateMeal: (meal: Meal) => void
-  addNewMeal: (newMeal: Meal) => void
 }
 
 const DayLine: React.FC<DayLineProps> = ({
@@ -22,70 +19,47 @@ const DayLine: React.FC<DayLineProps> = ({
   focusedIndex,
   handleFocusNext,
   handleFocusPrevious,
-  index,
-  meal,
-  updateMeal,
-  addNewMeal,
 }) => {
-  const [mealName, setMealName] = useState(meal?.name || '')
+  const [meal, setMeal] = useState<Meal | undefined>(undefined)
 
   useEffect(() => {
     const fetchMealFromDatabase = async () => {
       try {
-        const meals = await fetchMeals(currentDate) // Pass currentDate to fetchMeals
-        const mealForDay = meals.find((m) => m.day === day)
-        if (mealForDay) {
-          setMealName(mealForDay.name)
-        }
+        const meals = await fetchMeals(currentDate)
+        const mealForDay = meals.find(
+          (m) => m.day === currentDate.toISOString().substring(0, 10)
+        )
+        setMeal(mealForDay)
       } catch (error) {
         console.error('Error fetching meal:', error)
       }
     }
 
     fetchMealFromDatabase()
-  }, [day, currentDate])
+  }, [currentDate])
 
   const handleMealChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = event.target.value
-    setMealName(newName)
-    if (meal) {
-      updateMeal({ ...meal, name: newName })
-    }
+    // Assuming the MealInput component handles changes
   }
 
   const handleAddNewMeal = async () => {
-    if (mealName.trim() !== '') {
-      const newMeal: Meal = {
-        id: '',
-        day: currentDate.toISOString().substring(0, 10),
-        name: mealName,
-        isFavourite: false,
-      }
-      try {
-        const savedMeal = await saveMeal(newMeal)
-        addNewMeal(savedMeal)
-      } catch (error) {
-        console.error('Error saving meal:', error)
-      }
-    }
+    // Assuming the MealInput component handles adding new meals
   }
-
-  const formattedDay = currentDate.toISOString().substring(0, 10)
 
   return (
     <div className="flex flex-row ml-10">
       <div className="flex flex-col p-2 border-b w-96">
         <label className="mb-4" htmlFor={`${day}DinnerInput`}>
-          {day}: {formattedDay}
+          {day}: {currentDate.toISOString().substring(0, 10)}
         </label>
         <MealInput
-          value={mealName}
+          value={meal?.name || ''}
           day={day}
-          isFocused={focusedIndex === index}
+          isFocused={focusedIndex === 0} // Assuming 0 is the index of the focused element
           onFocusNext={handleFocusNext}
           onFocusPrevious={handleFocusPrevious}
           onChange={handleMealChange}
-          onSave={addNewMeal}
+          onSave={handleAddNewMeal}
         />
       </div>
       <div className="p-2 border-b flex align-middle">

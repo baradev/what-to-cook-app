@@ -2,7 +2,8 @@ import { fetchMeals } from '@/app/lib/data'
 import Week from '@/app/ui/Week'
 
 export default async function Page() {
-  const meals = await fetchMeals()
+  const currentDate = new Date() // Get current date
+  const meals = await fetchMeals(currentDate) // Pass current date to fetchMeals
 
   return (
     <div className="flex">

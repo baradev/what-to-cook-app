@@ -3,10 +3,8 @@
 import { sql, QueryResultRow } from '@vercel/postgres' // Import QueryResultRow
 import { Meal } from './definitions'
 
-export async function fetchMeals(): Promise<Meal[]> {
-  // Update return type to Promise<Meal[]>
+export async function fetchMeals(currentDate: Date): Promise<Meal[]> {
   try {
-    // Fetch meals from the database
     const data = await sql<Meal>`
       SELECT
         id,
@@ -14,10 +12,10 @@ export async function fetchMeals(): Promise<Meal[]> {
         day,
         isFavourite
       FROM meals
+      WHERE day = ${currentDate.toISOString().substring(0, 10)}
     `
 
     const meals: Meal[] = data.rows.map((row: QueryResultRow) => ({
-      // Map QueryResultRow to Meal
       id: row.id,
       name: row.name,
       day: row.day,
