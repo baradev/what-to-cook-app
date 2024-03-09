@@ -39,11 +39,30 @@ const DayLine: React.FC<DayLineProps> = ({
   }, [currentDate])
 
   const handleMealChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Assuming the MealInput component handles changes
+    const newMealName = event.target.value
+    setMeal((prevMeal) => ({
+      ...prevMeal,
+      name: newMealName,
+    }))
   }
 
   const handleAddNewMeal = async () => {
-    // Assuming the MealInput component handles adding new meals
+    try {
+      if (meal && meal.name) {
+        // Ensure the day value is included when saving a new meal
+        const newMeal: Meal = {
+          id: '', // You may need to generate a unique id here
+          day: currentDate.toISOString().substring(0, 10), // Use currentDate for the day value
+          name: meal.name,
+          isFavourite: false,
+        }
+
+        const savedMeal = await saveMeal(newMeal)
+        setMeal(savedMeal) // Update the meal with the saved meal from the database
+      }
+    } catch (error) {
+      console.error('Error adding new meal:', error)
+    }
   }
 
   return (
@@ -53,9 +72,9 @@ const DayLine: React.FC<DayLineProps> = ({
           {day}: {currentDate.toISOString().substring(0, 10)}
         </label>
         <MealInput
-          value={meal?.name || ''}
+          value={meal ? meal.name : ''}
           day={day}
-          isFocused={focusedIndex === 0} // Assuming 0 is the index of the focused element
+          isFocused={focusedIndex === 0}
           onFocusNext={handleFocusNext}
           onFocusPrevious={handleFocusPrevious}
           onChange={handleMealChange}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Meal } from '../lib/definitions'
 
 interface Props {
@@ -20,12 +20,18 @@ const MealInput: React.FC<Props> = ({
   onChange,
   onSave, // Updated prop type
 }) => {
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [inputValue, setInputValue] = useState(value)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
       event.currentTarget.blur()
+      handleSave()
     } else if (event.key === 'ArrowDown') {
       event.preventDefault()
       onFocusNext()
@@ -36,19 +42,15 @@ const MealInput: React.FC<Props> = ({
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value)
     onChange(event)
-    const mealName = event.target.value
-    // Construct a Meal object and pass it to onSave
-    const newMeal: Meal = {
-      id: '', // You may need to generate a unique id here
-      day: day,
-      name: mealName,
-      isFavourite: false,
-    }
-    onSave(newMeal)
   }
 
-  React.useEffect(() => {
+  const handleSave = () => {
+    onSave(inputValue)
+  }
+
+  useEffect(() => {
     if (isFocused && inputRef.current) {
       inputRef.current.focus()
     }
@@ -59,7 +61,7 @@ const MealInput: React.FC<Props> = ({
       <input
         ref={inputRef}
         type="text"
-        value={value}
+        value={inputValue}
         id={`${day}DinnerInput`}
         name={`${day}DinnerInput`}
         placeholder={`Enter ${day}'s Dinner Idea`}
