@@ -1,4 +1,5 @@
 import React from 'react'
+import { Meal } from '../lib/definitions'
 
 interface Props {
   day: string
@@ -6,7 +7,8 @@ interface Props {
   onFocusNext: () => void
   onFocusPrevious: () => void
   value: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void // New prop
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSave: (meal: Meal) => void // Update prop type to accept Meal
 }
 
 const MealInput: React.FC<Props> = ({
@@ -15,7 +17,8 @@ const MealInput: React.FC<Props> = ({
   onFocusNext,
   onFocusPrevious,
   value,
-  onChange, // New prop
+  onChange,
+  onSave, // Updated prop type
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -30,6 +33,19 @@ const MealInput: React.FC<Props> = ({
       event.preventDefault()
       onFocusPrevious()
     }
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(event)
+    const mealName = event.target.value
+    // Construct a Meal object and pass it to onSave
+    const newMeal: Meal = {
+      id: '', // You may need to generate a unique id here
+      day: day,
+      name: mealName,
+      isFavourite: false,
+    }
+    onSave(newMeal)
   }
 
   React.useEffect(() => {
@@ -50,7 +66,7 @@ const MealInput: React.FC<Props> = ({
         className="w-full max-w-xs h-8 input-success"
         onKeyDown={handleKeyDown}
         onFocus={() => inputRef.current?.select()}
-        onChange={onChange} // Pass the change handler
+        onChange={handleChange} // Use the handleChange function
       />
     </div>
   )

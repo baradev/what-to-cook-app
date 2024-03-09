@@ -1,8 +1,8 @@
-// DayLine.tsx
 import React, { useState } from 'react'
 import MealInput from './MealInput'
 import { HeartButton } from './HeartButton'
 import { Meal } from '@/app/lib/definitions'
+import { saveMeal } from '../lib/data' // Import the saveMeal function
 
 interface DayLineProps {
   day: string
@@ -13,7 +13,7 @@ interface DayLineProps {
   handleFocusNext: () => void
   handleFocusPrevious: () => void
   updateMeal: (meal: Meal) => void
-  addNewMeal: (newMeal: Meal) => void // Add this prop for adding new meals
+  addNewMeal: (newMeal: Meal) => void
 }
 
 const DayLine: React.FC<DayLineProps> = ({
@@ -25,7 +25,7 @@ const DayLine: React.FC<DayLineProps> = ({
   index,
   meal,
   updateMeal,
-  addNewMeal, // Receive the addNewMeal prop
+  addNewMeal,
 }) => {
   const [mealName, setMealName] = useState(meal?.name || '')
 
@@ -37,7 +37,7 @@ const DayLine: React.FC<DayLineProps> = ({
     }
   }
 
-  const handleAddNewMeal = () => {
+  const handleAddNewMeal = async () => {
     if (mealName.trim() !== '') {
       const newMeal: Meal = {
         id: '', // You may need to generate a unique id here
@@ -45,16 +45,25 @@ const DayLine: React.FC<DayLineProps> = ({
         name: mealName,
         isFavourite: false,
       }
-      addNewMeal(newMeal)
-      setMealName('')
+      // Save the new meal to the database
+      try {
+        const savedMeal = await saveMeal(newMeal)
+        // Once saved, call addNewMeal with the saved meal data
+        addNewMeal(savedMeal)
+        setMealName('') // Reset the mealName input
+      } catch (error) {
+        console.error('Error saving meal:', error)
+      }
     }
   }
+
+  const formattedDay = currentDate.toISOString().substring(0, 10)
 
   return (
     <div className="flex flex-row ml-10">
       <div className="flex flex-col p-2 border-b w-96">
         <label className="mb-4" htmlFor={`${day}DinnerInput`}>
-          {day}: {currentDate.toISOString().substring(0, 10)}
+          {day}: {formattedDay}
         </label>
         <MealInput
           value={mealName}
@@ -63,6 +72,7 @@ const DayLine: React.FC<DayLineProps> = ({
           onFocusNext={handleFocusNext}
           onFocusPrevious={handleFocusPrevious}
           onChange={handleMealChange}
+          onSave={addNewMeal} // Pass the addNewMeal function to MealInput
         />
       </div>
       <div className="p-2 border-b flex align-middle">
