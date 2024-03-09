@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MealInput from './MealInput'
 import { HeartButton } from './HeartButton'
 import { Meal } from '@/app/lib/definitions'
-import { saveMeal } from '../lib/data' // Import the saveMeal function
+import { saveMeal, fetchMeals } from '../lib/data'
 
 interface DayLineProps {
   day: string
@@ -29,6 +29,22 @@ const DayLine: React.FC<DayLineProps> = ({
 }) => {
   const [mealName, setMealName] = useState(meal?.name || '')
 
+  useEffect(() => {
+    const fetchMealFromDatabase = async () => {
+      try {
+        const meals = await fetchMeals(currentDate) // Pass currentDate to fetchMeals
+        const mealForDay = meals.find((m) => m.day === day)
+        if (mealForDay) {
+          setMealName(mealForDay.name)
+        }
+      } catch (error) {
+        console.error('Error fetching meal:', error)
+      }
+    }
+
+    fetchMealFromDatabase()
+  }, [day, currentDate])
+
   const handleMealChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value
     setMealName(newName)
@@ -40,17 +56,14 @@ const DayLine: React.FC<DayLineProps> = ({
   const handleAddNewMeal = async () => {
     if (mealName.trim() !== '') {
       const newMeal: Meal = {
-        id: '', // You may need to generate a unique id here
-        day: day,
+        id: '',
+        day: currentDate.toISOString().substring(0, 10),
         name: mealName,
         isFavourite: false,
       }
-      // Save the new meal to the database
       try {
         const savedMeal = await saveMeal(newMeal)
-        // Once saved, call addNewMeal with the saved meal data
         addNewMeal(savedMeal)
-        setMealName('') // Reset the mealName input
       } catch (error) {
         console.error('Error saving meal:', error)
       }
@@ -72,13 +85,12 @@ const DayLine: React.FC<DayLineProps> = ({
           onFocusNext={handleFocusNext}
           onFocusPrevious={handleFocusPrevious}
           onChange={handleMealChange}
-          onSave={addNewMeal} // Pass the addNewMeal function to MealInput
+          onSave={addNewMeal}
         />
       </div>
       <div className="p-2 border-b flex align-middle">
         <HeartButton />
-        <button onClick={handleAddNewMeal}>Add Meal</button>{' '}
-        {/* Button to add new meal */}
+        <button onClick={handleAddNewMeal}>Add Meal</button>
       </div>
     </div>
   )
