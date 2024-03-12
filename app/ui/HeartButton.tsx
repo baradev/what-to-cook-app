@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+// HeartButton.jsx
 
-export const HeartButton = () => {
+import React, { useState, useEffect } from 'react'
+
+export const HeartButton = ({ isFavorite, onClick }) => {
   const [clicked, setClicked] = useState(false)
+
+  useEffect(() => {
+    setClicked(isFavorite)
+  }, [isFavorite])
 
   const handleClick = () => {
     setClicked(!clicked)
+    onClick()
   }
 
   return (

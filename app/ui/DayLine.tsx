@@ -1,19 +1,12 @@
+// DayLine.jsx
+
 import React, { useEffect, useState } from 'react'
 import MealInput from './MealInput'
 import { HeartButton } from './HeartButton'
 import { Meal } from '@/app/lib/definitions'
-import { saveMeal, fetchMeals } from '../lib/data'
+import { fetchMeals, saveMeal } from '../lib/data'
 
-interface DayLineProps {
-  day: string
-  currentDate: Date
-  focusedIndex: number
-  index: number
-  handleFocusNext: () => void
-  handleFocusPrevious: () => void
-}
-
-const DayLine: React.FC<DayLineProps> = ({
+const DayLine = ({
   day,
   currentDate,
   focusedIndex,
@@ -23,7 +16,7 @@ const DayLine: React.FC<DayLineProps> = ({
   const [meal, setMeal] = useState<Meal | undefined>(undefined)
 
   useEffect(() => {
-    const fetchMealFromDatabase = async () => {
+    const fetchData = async () => {
       try {
         const meals = await fetchMeals(currentDate)
         const mealForDay = meals.find(
@@ -35,7 +28,7 @@ const DayLine: React.FC<DayLineProps> = ({
       }
     }
 
-    fetchMealFromDatabase()
+    fetchData()
   }, [currentDate])
 
   const handleMealChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,19 +42,33 @@ const DayLine: React.FC<DayLineProps> = ({
   const handleAddNewMeal = async () => {
     try {
       if (meal && meal.name) {
-        // Ensure the day value is included when saving a new meal
         const newMeal: Meal = {
-          id: '', // You may need to generate a unique id here
-          day: currentDate.toISOString().substring(0, 10), // Use currentDate for the day value
+          id: '',
+          day: currentDate.toISOString().substring(0, 10),
           name: meal.name,
           isFavourite: false,
         }
 
         const savedMeal = await saveMeal(newMeal)
-        setMeal(savedMeal) // Update the meal with the saved meal from the database
+        setMeal(savedMeal)
       }
     } catch (error) {
       console.error('Error adding new meal:', error)
+    }
+  }
+
+  const handleHeartClick = async () => {
+    try {
+      if (meal && meal.name) {
+        const updatedMeal: Meal = {
+          ...meal,
+          isFavourite: !meal.isFavourite,
+        }
+        const savedMeal = await saveMeal(updatedMeal)
+        setMeal(savedMeal)
+      }
+    } catch (error) {
+      console.error('Error updating meal:', error)
     }
   }
 
@@ -82,7 +89,11 @@ const DayLine: React.FC<DayLineProps> = ({
         />
       </div>
       <div className="p-2 border-b flex align-middle">
-        <HeartButton />
+        <HeartButton
+          onClick={handleHeartClick}
+          isFavorite={meal ? meal.isFavourite : false}
+          disabled={!meal || !meal.name}
+        />
         <button onClick={handleAddNewMeal}>Add Meal</button>
       </div>
     </div>
