@@ -18,7 +18,7 @@ export const HeartButton = ({ isFavorite, onClick }) => {
     <div>
       <button
         className={`btn ${clicked ? 'shadow' : ''}`} // Add the shadow class when clicked
-        onClick={handleClick}
+        onClick={handleClick} // Trigger handleClick directly
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

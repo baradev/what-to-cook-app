@@ -59,13 +59,13 @@ const DayLine = ({
 
   const handleHeartClick = async () => {
     try {
-      if (meal && meal.name) {
+      if (meal) {
         const updatedMeal: Meal = {
           ...meal,
-          isFavourite: !meal.isFavourite,
+          isFavourite: !meal.isFavourite, // Toggle isFavourite status
         }
-        const savedMeal = await saveMeal(updatedMeal)
-        setMeal(savedMeal)
+        await saveMeal(updatedMeal) // Save the updated meal
+        setMeal(updatedMeal) // Update the state directly
       }
     } catch (error) {
       console.error('Error updating meal:', error)
@@ -92,9 +92,8 @@ const DayLine = ({
         <HeartButton
           onClick={handleHeartClick}
           isFavorite={meal ? meal.isFavourite : false}
-          disabled={!meal || !meal.name}
+          disabled={!meal}
         />
-        <button onClick={handleAddNewMeal}>Add Meal</button>
       </div>
     </div>
   )
